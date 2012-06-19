@@ -10,9 +10,14 @@
 		<link rel="stylesheet" href="../lib/font-awesome/css/font-awesome.css">
 		<style>
 
+			/* Define composited layers: <http://davidbcalhoun.com/2011/mobile-
+			   performance-manifesto> */
+			#page, #author, #mgmt-nav {
+				-webkit-transform: translateZ(0);
+			}
+
 			/* Flip */
 			#page {
-				-webkit-transform: translateZ(0);
 				-webkit-perspective: 1000;
 			}
 			#sheet {
