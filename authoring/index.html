@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+		<title>Nouncy</title>
+
+		<link rel="stylesheet" href="../lib/font-awesome/css/font-awesome.css">
+		<style>
+
+			* {
+				box-sizing: border-box;
+			}
+			body {
+				margin: 1em;
+				font-family: "Helvetica Neue", Helvetica, sans-serif;
+				font-size: 100%;
+				line-height: 1.75em;
+				color: #333;
+				-webkit-font-smoothing: antialiased;
+				-webkit-text-transform: optimizeLegibility;
+				overflow-x: hidden;
+			}
+			html {
+				background: url(patagonia-bg.jpg) no-repeat center center fixed;
+				-webkit-background-size: cover;
+			}
+			a {
+				color: SteelBlue;
+			}
+
+			#page {
+				position: relative;
+				width: 960px;
+				margin: -25px auto 0 auto;
+				padding: 10px 20px;
+				background-color: WhiteSmoke;
+				border-radius: .5em;
+				box-shadow: 0 .2em 1em rgba(0, 0, 0, .5);
+			}
+
+			#page p {
+				margin: .5em 0;
+				padding: 0 10px;
+			}
+			#page .widget {
+				margin: 1em 10px;
+			}
+			#page p.summary {
+				margin-top: 2em;
+				font-size: 1.4em;
+			}
+
+			#page > * {
+				max-width: 650px;
+			}
+			#page > .editable {
+				position: relative;
+				outline: none;
+			}
+			#page > .editable.empty:before {
+				position: absolute;
+				top: 0;
+				left: 0;
+				content: attr(data-placeholder);
+				color: #ccc;
+			}
+
+			#page .widget {
+				border-top: 1px dashed #ddd;
+				border-bottom: 1px dashed #ddd;
+				outline: none;
+			}
+			#page .widget:focus {
+				background-color: #eee;
+			}
+
+			#page .image.widget {
+				overflow-x: hidden;
+				padding-left: .7em;
+				padding-top: .7em;
+			}
+			#page .image.widget img, #page .image.widget .empty {
+				float: left;
+				height: 11em;
+				margin-right: .7em;
+				margin-bottom: .7em;
+				border: 1px solid rgba(0, 0, 0, .1);
+				cursor: pointer;
+			}
+			#page .image.widget .empty {
+				position: relative;
+				width: 11em;
+				border-radius: .5em;
+			}
+			#page .image.widget .empty:after {
+				position: absolute;
+				top: 0;
+				right: 0;
+				bottom: 0;
+				left: 0;
+				padding: 2.5em .5em 2.5em .5em;
+				content: "Drag & drop image here or select a file from your computer…";
+				text-align: center;
+				color: #ccc;
+			}
+			#page .image.widget img:hover {
+				border-color: SteelBlue;
+			}
+
+			#page > aside {
+				position: absolute;
+				top: 0;
+				right: 0;
+				bottom: 0;
+				width: 250px;
+				border-left: 1px solid #ddd;
+				background-color: #eee;
+				border-radius: 0 .5em .5em 0;
+			}
+
+			#add {
+				position: absolute;
+				left: -15px;
+				-webkit-transition-property: top, opacity;
+				-webkit-transition-duration: .5s;
+			}
+			#page:not(:hover) #add {
+				opacity: 0;
+			}
+			#add .expand, #add .types {
+				color: WhiteSmoke;
+				background-color: Orange;
+			}
+			#add .expand {
+				padding-top: 1px;
+				border-radius: 15px;
+				width: 30px;
+				height: 30px;
+				text-align: center;
+				cursor: pointer;
+				-webkit-transition: opacity .5s;
+			}
+			#add:not(.expanded):not(:hover) .expand {
+				opacity: .5;
+			}
+			#add .types {
+				position: absolute;
+				top: 5px;
+				left: 25px;
+				bottom: 5px;
+				width: 0;
+				overflow-x: hidden;
+				overflow-y: hidden;
+				-webkit-transition-property: width, opacity;
+				-webkit-transition-duration: .5s;
+				font-size: 12px;
+				line-height: 20px;
+				white-space: nowrap;
+				opacity: .7;
+				border-radius: 0 10px 10px 0;
+			}
+			#add:not(:hover) .types {
+				opacity: .3;
+			}
+			#add.expanded .types {
+				width: 450px;
+			}
+			#add .types > span {
+				margin-left: 10px;
+				cursor: pointer;
+			}
+			#add .types > span:first-child {
+				margin-left: 20px;
+			}
+			#add .types > span:hover {
+				text-decoration: underline;
+			}
+
+			#controls {
+				position: fixed;
+				top: 0;
+				right: 250px;
+				left: 0;
+				-webkit-transition: top .5s;
+			}
+			body:not(.edit) #controls {
+				top: -5em;
+			}
+			#controls .type {
+				width: 700px;
+				margin: 0 auto;
+				padding: 0 .2em .2em .2em;
+				color: #999;
+				font-size: .8em;
+				background-color: WhiteSmoke;
+				border-bottom: 3px dashed #ddd;
+			}
+			body:not(.text) #controls .type.text {
+				display: none;
+			}
+			body:not(.image) #controls .type.image {
+				display: none;
+			}
+
+		</style>
+	</head>
+	<body>
+
+		<div id="page">
+			<p class="editable summary" data-placeholder="Short and sweet summary">
+				Al je spullen veilig meenemen in de tassen van Patagonia: waterproof, stevig en altijd groot genoeg. De Black Hole Duffel was al verkrijgbaar met een inhoud van 60, 90 en 120 liter, maar is er nu ook in een kleinere uitvoering van 45 liter. Handig voor de sportschool of als handbagage in het vliegtuig. De Patagonia Atacama is dit seizoen in verschillende vrolijke kleuren te koop, maar ook in ingetogen zwart en grijs.
+			</p>
+			<div class="widget image" tabindex="0">
+				<img src="http://cdn.pressdoc.com/26422/images/84144-patagonia_blackholeduffel_mango-original-1334056588.jpg">
+				<img src="http://cdn.pressdoc.com/26422/images/84145-patagonia_blackholeduffel_open_lagoon-original-1334056619.jpg">
+				<img src="http://cdn.pressdoc.com/26422/images/84146-patagonia_blacholeduffel_back_black-original-1334056675.jpg">
+			</div>
+			<div class="editable text" data-placeholder="Tell your story here">
+				<p>
+					De Black Hole Duffel is gemaakt van stevig waterproof materiaal, waardoor de tas bestand is tegen regen en andere weersomstandigheden De U-vormige opening geeft toegang tot het grote vak. De tas heeft ook twee kleinere vakken van gaas aan de binnenkant. Door het gaas kun je precies zien wat er in zit en heb je je belangrijke spullen altijd makkelijk bij de hand. Met een stevige onderkant voor extra bescherming. Handig als handbagage, maar evengoed bestand tegen het ruwe gooi-en smijtwerk in een bagageruim, trein of boot.
+				</p>
+				<p>
+					De Black Hole Duffel familie is nu uitgebreid met een klein broertje. De tas is ook verkrijgbaar in een 45liter variant, naast de uitvoeringen van 60, 90 en 120 liter. Dezelfde kwaliteit en stevigheid als je gewend bent van de tassen van Patagonia, maar dan een maatje kleiner. De kleine tas is mee te nemen als handbagage in het vliegtuig, maar is evengoed bestand tegen een ruwe behandeling in het bagageruim. De drie grotere tassen van 60, 90 en 120 liter hebben twee schouderbanden, zodat de tas als rugzak gedragen kan worden.
+				</p>
+			</div>
+			<aside></aside>
+			<div id="add">
+				<div class="expand icon-plus"></div>
+				<div class="types">
+					<span data-type="image" class="icon-picture"> image</span>
+					<span data-type="video" class="icon-facetime-video"> video</span>
+					<span data-type="quote" class="icon-comment"> quote</span>
+					<span data-type="tweet" class="icon-twitter"> tweet</span>
+					<span data-type="audio" class="icon-music"> audio</span>
+					<span data-type="map" class="icon-map-marker"> map</span>
+				</div>
+			</div>
+		</div>
+		<div id="controls">
+			<div class="type text">
+				<button data-command="bold">bold</button>
+				<button data-command="link">link</button>
+			</div>
+			<div class="type image">
+				<label><input type="radio" name="presentation" value="thumbs" checked> thumbnails</label>
+				<label><input type="radio" name="presentation" value="slider"> slider</label>
+			</div>
+		</div>
+
+		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.js"></script>
+		<script src="http://documentcloud.github.com/underscore/underscore-min.js"></script>
+		<script src="../lib/jquery.htmleditable.standalone.js"></script>
+		<script>
+
+			jQuery(function($) {
+
+				var setEditing = function(elem) {
+					console.log('setEditing', arguments);
+					if (elem) {
+						$('body').addClass('edit');
+						$('body').removeClass('text image');
+						if ($(elem).hasClass('editable')) {
+							$('body').addClass('text');
+						} else if ($(elem).hasClass('image')) {
+							$('body').addClass('image');
+						}
+						// why do we need the timeout?!?
+						setTimeout(function() {
+							$('#add').removeClass('expanded');
+						});
+					} else {
+						$('body').removeClass('edit');
+					}
+				};
+
+				var setupHtmleditable = function() {
+					this.
+						htmleditable(['bold']).
+						on('focus', function() {
+							setEditing(this);
+						}).
+						on('blur', function() {
+							setEditing();
+						}).
+						on('change', function() {
+							var isEmpty = false;
+							if ($.trim($(this).html()).length === 0) {
+								isEmpty = true;
+							} else if ($.trim($(this).text()).length === 0) {
+								isEmpty = true;
+							}
+							$(this)[(isEmpty ? 'add' : 'remove') + 'Class']('empty');
+						});
+				};
+				var setupWidget = function() {
+					this.
+						on('focus', function() {
+							setEditing(this);
+						}).
+						on('blur', function() {
+							setEditing();
+						});
+				};
+
+				setupHtmleditable.call($('#page > .editable'));
+				setupWidget.call($('#page .widget'));
+
+				var $after;
+				$('#page').on('mousemove', function(e) {
+
+					var $blocks = $('.summary, .text > p, .widget', this);
+					$after = $blocks.first();
+					$blocks.each(function() {
+						if (e.pageY > $(this).offset().top + $(this).outerHeight() / 2) {
+							$after = $(this);
+						}
+					});
+					if ($after.length > 0) {
+						$('#add').css('top', $after.offset().top - $('#page').offset().top + $after.outerHeight() - $('#add').outerHeight() / 2 + 5);
+					}
+
+				});
+
+				$('#add').on('click', function() {
+					$(this).toggleClass('expanded');
+				});
+
+				$('#add .types > span').on('click', function() {
+					var $widget;
+					switch ($(this).data('type')) {
+						case 'image':
+							$widget = $('<div class="image widget" tabindex="0"><div class="empty"></div></div>');
+							break;
+					}
+					if ($widget) {
+						setupWidget.call($widget);
+					}
+					if ($after.closest('.editable').length > 0) {
+						var $newTextBlock = $('<div class="text editable"></div>');
+						$newTextBlock.append($after.nextAll());
+						$after.parent().after($newTextBlock);
+						setupHtmleditable.call($newTextBlock);
+						$after.parent().after($widget);
+					} else if ($after.is('.editable, .widget')) {
+						$after.after($widget);
+					}
+					$widget.focus();
+					// setEditing($widget[0]);
+				});
+
+			});
+
+		</script>
+	</body>
+</html>
