@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+		<title>Nouncy</title>
+
+		<!-- <script src="http://use.typekit.com/fcj4lit.js"></script>
+		<script>try{Typekit.load();}catch(e){}</script> -->
+		<link rel="stylesheet" href="../lib/font-awesome/css/font-awesome.css">
+		<style>
+
+			/* Define composited layers: <http://davidbcalhoun.com/2011/mobile-
+			   performance-manifesto> */
+			#page, #sheet, #story, #mgmt, #author, #mgmt-nav {
+				-webkit-transform: translateZ(0);
+			}
+
+			/* Flip */
+			#page {
+				-webkit-perspective: 1000;
+			}
+			#sheet {
+				-webkit-transform-style: preserve-3d;
+				-webkit-transition: all 1s;
+			}
+			body.mgmt #sheet {
+				-webkit-transform: rotateY(180deg);
+			}
+			#story, #mgmt {
+				-webkit-backface-visibility: hidden;
+			}
+			#mgmt {
+				-webkit-transform: rotateY(180deg);
+			}
+
+			/* Positioning */
+			#sheet {
+				/* Transition defined in flip */
+			}
+			#author {
+				-webkit-transition: margin-right 1s;
+			}
+			#mgmt-nav {
+				-webkit-transition: margin-left .5s;
+			}
+			body.mgmt #sheet {
+				margin-left: 160px;
+			}
+			body.mgmt #author {
+				margin-right: -1000px;
+			}
+			body.mgmt #author {
+				-webkit-transition-duration: .5s;
+			}
+			body.mgmt #mgmt-nav {
+				-webkit-transition-duration: 1s;
+			}
+			body:not(.mgmt) #mgmt-nav {
+				margin-left: -1000px;
+			}
+			body.edit #sheet {
+				margin-left: -90px;
+			}
+			body.edit #author {
+				margin-right: -90px;
+			}
+
+			/* Style */
+			* {
+				box-sizing: border-box;
+			}
+			body {
+				margin: 1em;
+				font-family: "Helvetica Neue", Helvetica, sans-serif;
+				font-size: 100%;
+				line-height: 1.75em;
+				color: #333;
+				-webkit-font-smoothing: antialiased;
+				-webkit-text-transform: optimizeLegibility;
+				overflow-x: hidden;
+			}
+			html {
+				background: url(patagonia-bg.jpg) no-repeat center center fixed;
+				-webkit-background-size: cover;
+			}
+			a {
+				color: SteelBlue;
+			}
+
+			@font-face {
+				font-family: Cassannet;
+				font-weight: bold;
+				src: url('./Cassannet Bold.otf');
+			}
+			#brand {
+				position: fixed;
+				top: .8em;
+				left: 1.2em;
+				text-transform: uppercase;
+				color: transparent;
+				text-shadow: -1px -1px 0 rgba(255, 255, 255, .3), 1px 1px 0 rgba(0, 0, 0, .3);
+				font-family: Cassannet, sans-serif;
+				font-weight: bold;
+				font-size: 1.2em;
+				line-height: 1;
+			}
+
+			#account {
+				position: fixed;
+				top: 1em;
+				right: 1.5em;
+				text-transform: uppercase;
+				color: rgba(0, 0, 0, .5);
+				border-color: rgba(0, 0, 0, .5);
+				-webkit-transition: all .2s;
+				border-width: 1px;
+				border-style: solid;
+				font-size: .8em;
+				line-height: 1;
+				padding: .5em .8em .4em .8em;
+				border-radius: 1.2em;
+				text-decoration: none;
+				cursor: pointer;
+				white-space: nowrap;
+			}
+			#account:after {
+				content: "in";
+			}
+			body.auth #account:after {
+				content: "out";
+			}
+			#account:hover {
+				color: rgba(255, 255, 255, .5);
+				border-color: rgba(255, 255, 255, .5);
+			}
+
+			#page {
+				width: 960px;
+				margin: 0 auto;
+			}
+			#sheet {
+				width: 800px;
+			}
+
+			#sheet .actions {
+				height: 3.1em;
+				-webkit-transition: height .5s;
+				overflow-y: hidden;
+			}
+			body:not(.auth) #sheet .actions {
+				height: 0;
+			}
+			#sheet .actions > * {
+				border-bottom: .3em dashed rgba(0, 0, 0, .1);
+				padding: .4em .5em .5em .5em;
+				overflow-y: hidden;
+			}
+			#sheet .actions button {
+				display: block;
+				-webkit-appearance: none;
+				color: WhiteSmoke;
+				cursor: pointer;
+				text-transform: uppercase;
+				font-size: .7em;
+				font-weight: bold;
+				padding: .5em 1.2em;
+			}
+			#sheet .actions button:active {
+				border-bottom-width: .1em;
+				border-top-width: .2em;
+			}
+			#edit, #publish {
+				background-color: ForestGreen;
+				border-color: #1c701c;
+				border-width: 0 .1em .3em .1em;
+				border-style: solid;
+			}
+			#manage, #view {
+				float: right;
+				background-color: SteelBlue;
+				border-color: #3b6f99;
+				border-width: 0 .1em .3em .1em;
+				border-style: solid;
+			}
+			body.edit #manage,
+			body.edit #edit {
+				display: none;
+			}
+			body:not(.edit) #publish {
+				display: none;
+			}
+
+			#story, #mgmt {
+				background-color: rgba(255, 255, 255, .9);
+				border: .3em solid rgba(0, 0, 0, .1);
+				box-shadow: 0 .2em 3em rgba(0, 0, 0, .5);
+			}
+			#story {
+				min-height: 100em;
+			}
+			#story > .content {
+				padding: .45em 134px 1.2em 0;
+				font-family: Palatino, Georgia, "Times New Roman", serif;
+			}
+			#story > .content .widget {
+				display: block;
+				margin: 0;
+				padding: .75em 2em;
+				border-right: 6px solid transparent;
+			}
+			body.edit #story > .content .widget:hover {
+				border-color: rgba(0, 0, 0, .1);
+			}
+			body.edit #story > .content .widget:focus {
+				border-color: ForestGreen;
+				background-color: rgba(255, 255, 255, .9);
+				outline-style: none;
+			}
+			#story > .content time.widget {
+				font-style: italic;
+				color: #888;
+			}
+			#story > .content h1.widget {
+				font-size: 3em;
+				line-height: 1.1875em;
+				padding: .25em .67em;
+			}
+			#story > .content h2.widget,
+			#story > .content p.primary.widget {
+				font-size: 1.5em;
+				padding: .5em 1.33em;
+			}
+			#story > .content img.primary.widget {
+				width: 100%;
+				/*max-height: 400px;*/
+			}
+			#story > .content .gallery.widget {
+				overflow-x: hidden;
+			}
+			#story > .content .gallery.widget img {
+				float: left;
+				height: 11em;
+				margin-right: .7em;
+				margin-bottom: .7em;
+				border: 1px solid rgba(0, 0, 0, .1);
+				cursor: pointer;
+			}
+			#story > .content .gallery.widget img:hover {
+				border-color: SteelBlue;
+			}
+			#story > .content .tweet.widget {
+				margin-left: 35px;
+			}
+
+			#mgmt {
+				position: absolute;
+				top: 0;
+				right: 0;
+				bottom: 0;
+				left: 0;
+			}
+			#mgmt > .content {
+				padding: .45em 2em 1.2em 50px;
+			}
+			#graph {
+				margin-top: 1.75em;
+			}
+
+			#author {
+				position: absolute;
+				top: 4em;
+				right: 0;
+				width: 300px;
+				padding: 1em;
+				line-height: 1.5;
+				background-color: White;
+				border: 1px solid rgba(0, 0, 0, .1);
+				border-radius: 1em;
+				box-shadow: 0 .1em .5em rgba(0, 0, 0, .1);
+			}
+			#author > * {
+				margin: 0;
+				padding: 1.2em 1em;
+			}
+			#author > .logo {
+				width: 100%;
+			}
+			#author > p {
+				border-top: 1px solid rgba(0, 0, 0, .1);
+				overflow-x: hidden;
+			}
+			#author > .bio {
+				font-size: .8em;
+				padding: 1.5em 1.25em;
+			}
+
+			#mgmt-nav {
+				position: absolute;
+				top: 4em;
+				left: 0;
+				width: 200px;
+				padding: 1em 0;
+				text-transform: uppercase;
+				background-color: White;
+				border: 1px solid rgba(0, 0, 0, .1);
+				border-radius: 1em;
+				box-shadow: 0 .1em .5em rgba(0, 0, 0, .1);
+			}
+			#mgmt-nav > ul {
+				list-style-type: none;
+				margin: 0;
+				padding: 0;
+			}
+			#mgmt-nav > ul > li {
+				padding: .5em 1em;
+				cursor: pointer;
+			}
+			#mgmt-nav > ul > li:hover {
+				background-color: rgba(0, 0, 0, .05);
+			}
+			#mgmt-nav > ul > li.select {
+				color: highlighttext;
+				background-color: highlight;
+			}
+
+		</style>
+	</head>
+	<body>
+
+		<div id="brand">
+			Nouncy
+		</div>
+
+		<div id="account">
+			<span class="icon-user"></span> Sign
+		</div>
+
+		<div id="page">
+			<div id="sheet">
+
+				<div id="story">
+					<div class="actions">
+						<div>
+							<button id="manage">Announce</button>
+							<button id="edit">Edit</button>
+							<button id="publish">Publish</button>
+						</div>
+					</div>
+					<article class="content">
+						<time class="text widget" datetime="2012-07-13">Amsterdam, vrijdag 13 juli 2012</time>
+						<h1 class="text widget">Announcing Nouncy: a new way to tell your news stories</h1>
+						<h2 class="text widget">Amsterdam based startup aims to help everyone get their news out</h2>
+						<img class="primary widget" src="nouncy-image.jpg">
+						<p class="primary text widget">
+							Everybody has news to announce and the web is the best place to do this. Telling news stories on the web to your target audience should be as easy as sending a Tweet. The founders of Nouncy made this their goal. If you go to Nouncy.com you can start typing and adding social content right away. Once you've hit publish, you can plug you story with your influentials, stakeholders and other members of your audience. The metrics at the back of your Nouncy show you how successful you have been.
+						</p>
+						<p class="text widget">
+							Here you can type as many details as you want. But do not forget to keep engaging you reader. You have a story to tell, not just a boring list of facts. Make it entertaining. Pervade your story with visual content like images, image galleries and youtube videos. Throw in a little music. And what the heck, do a little dance.
+						</p>
+						<div class="gallery widget">
+							<img src="https://asset1.basecamp.com/1874101/projects/540274-nouncy/attachments/8532499/f3ff50823ea6deb9cc0fe8c9eb29d905a719e896/original/nouncy_start.png">
+							<img src="https://asset1.basecamp.com/1874101/projects/540274-nouncy/attachments/8532500/3ab697285411c7ec833c53614a603c3b28c46839/original/nouncy_inputs.png">
+							<img src="https://asset1.basecamp.com/1874101/projects/540274-nouncy/attachments/8532501/361515bc03319d029013e60808f8384ca5eeb055/original/nouncy_filled.png">
+						</div>
+						<p class="text widget">
+							Do not hesitate to drag in other people by displaying Tweets or Facebook status updates that are relevant to your story. And don't forget to display as many contact details as possible. You want to encourage people to contact you when they have questions. They are the ones that will retell your story, so let them come to you.
+						</p>
+						<h2 class="text widget">Buzz</h2>
+						<p class="text widget">
+							This is where you show who is talking about your story.
+						</p>
+						<div class="tweet widget">
+							<blockquote class="twitter-tweet"><p>Nouncy makes me happy. The pre-nouncy era sucked. Now I can announce around the clock.</p>&mdash; Stef Gallé (@stefgalle) <a href="https://twitter.com/stefgalle/status/223746394257760256" data-datetime="2012-06-12T05:18:32+00:00">July 13, 2012</a></blockquote>
+							<script src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
+						</div>
+						<p class="text widget">
+							Some more text here.
+						</p>
+						<div class="widget">
+							<iframe width="588" height="331" src="http://www.youtube.com/embed/UOiA8z2xlbo" frameborder="0" allowfullscreen></iframe>
+						</div>
+					</article>
+				</div>
+
+				<div id="mgmt">
+					<div class="actions">
+						<div>
+							<button id="view">Done</button>
+						</div>
+					</div>
+					<div class="content">
+						<div id="graph"></div>
+					</div>
+				</div>
+
+			</div>
+
+			<div id="author">
+				<img class="logo" src="patagonia-logo.png">
+				<p class="contact">
+					7N60 Communicatie<br>
+					Damaris Beems<br>
+					Nieuwstad 100d<br>
+					1381 CE Weesp<br>
+					<span class="icon-phone"></span> <a href="tel:0294-490690">0294-490690</a><br>
+					<span class="icon-phone"></span> <a href="tel:06-22399374">06-22399374</a><br>
+					<span class="icon-envelope"></span> <a href="mailto:damaris@1967ers.nl">damaris@1967ers.nl</a>
+				</p>
+				<p class="bio">
+					Patagonia met een omzet van 414 miljoen dollar in het afgelopen boekjaar (april 2011), staat internationaal bekend om haar toewijding voor het maken van hoogwaardige producten en milieuactivisme. Bij het ontwikkelen van producten is Patagonia zich voortdurend bewust van haar verantwoordelijkheid voor het milieu en heeft duurzaamheid opgenomen als integraal onderdeel van de productontwikkeling. Het bedrijf gebruikt sinds 1996 alleen biologische katoen voor haar kledinglijn. Met de recente introductie van synthetische recycling van vezel-tot-vezel, neemt Patagonia afgedragen polyester en nylon kleding terug om dit te verwerken tot nieuwe producten, waarmee de originele grondstoffen worden hergebruikt. Het bedrijf is een voorvechter en pleitbezorger van transparantie en gebruikt daar onder meer haar interactieve website, the Footprint Chronicles, voor waarin de belasting voor het milieu en voor de mens van afzonderlijke producten wordt getoond. Patagonia is in 2007 uitgeroepen tot The Coolest Company on Earth op de voorpagina van het april nummer van Fortune Magazine. Met het Environmental Grants Program, staat Patagonia jaarlijks 1% van haar omzet af voor natuurbescherming (41,5 miljoen dollar aan lokale milieuactivisten sinds 1985) en met het Environmental Internship Program, kunnen medewerkers gedurende twee maanden voor een milieuorganisatie werken, terwijl Patagonia het salaris doorbetaald. Yvon Chouinard wil andere bedrijven inspireren om op dezelfde wijze te ondernemen, en begon daarom de 1% for the planet club, waarbij nu wereldwijd meer dan 1000 bedrijven zijn aangesloten, en die ieder 1% van hun omzet afstaan aan milieuorganisaties.
+				</p>
+			</div>
+
+			<div id="mgmt-nav">
+				<ul>
+					<li class="select">Status</li>
+					<li>Mail</li>
+					<li>Twitter</li>
+					<li>Web</li>
+				</ul>
+			</div>
+
+		</div>
+
+		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.js"></script>
+		<script src="http://documentcloud.github.com/underscore/underscore-min.js"></script>
+		<script src="../lib/jquery.htmleditable.standalone.js"></script>
+		<script src="http://code.highcharts.com/highcharts.js"></script>
+		<!-- <script src="../lib/jquery.zoomooz.min.js"></script> -->
+		<script>
+
+			// var light = new Photon.Light();
+			// var face = new Photon.Face($('#story')[0]);
+			// face.render(light, true);
+
+			// $('#story > .content .gallery.widget img').zoomTarget({
+			// 	root: $('body')
+			// });
+
+			$('#account').on('click', function() {
+				$('body').addClass('auth');
+				// Disable htmleditables.
+			});
+			$('#edit').on('click', function() {
+				$('body').addClass('edit');
+				$('#story > .content .text.widget').
+					htmleditable(['bold']).
+					first().focus();
+			});
+			$('#publish').on('click', function() {
+				$('body').removeClass('edit');
+			});
+			var chart;
+			$('#manage').on('click', function() {
+				$('body').addClass('mgmt');
+				if (chart) return;
+				setTimeout(function() {
+					chart = new Highcharts.Chart({
+						chart: {
+							renderTo: 'graph',
+							type: 'spline',
+							backgroundColor: 'transparent'
+						},
+						title: {
+							text: null
+						},
+						credits: {
+							enabled: false
+						},
+						xAxis: {
+							type: 'datetime',
+							dateTimeLabelFormats: { // don't display the dummy year
+								month: '%e. %b',
+								year: '%b'
+							}
+						},
+						yAxis: {
+							title: {
+								text: null
+							},
+							labels: {
+								enabled: false
+							},
+							min: 0
+						},
+						tooltip: {
+							formatter: function() {
+									return '<b>'+ this.series.name +'</b><br/>'+
+									Highcharts.dateFormat('%e. %b', this.x) +': '+ this.y +' m';
+							}
+						},
+						
+						series: [{
+							name: 'via mail',
+							// Define the data points. All series have a dummy year
+							// of 1970/71 in order to be compared on the same x axis. Note
+							// that in JavaScript, months start at 0 for January, 1 for February etc.
+							data: [
+								[Date.UTC(1970,  9, 27), 0   ],
+								[Date.UTC(1970, 10, 10), 0.6 ],
+								[Date.UTC(1970, 10, 18), 0.7 ],
+								[Date.UTC(1970, 11,  2), 0.8 ],
+								[Date.UTC(1970, 11,  9), 0.6 ],
+								[Date.UTC(1970, 11, 16), 0.6 ],
+								[Date.UTC(1970, 11, 28), 0.67],
+								[Date.UTC(1971,  0,  1), 0.81],
+								[Date.UTC(1971,  0,  8), 0.78],
+								[Date.UTC(1971,  0, 12), 0.98],
+								[Date.UTC(1971,  0, 27), 1.84],
+								[Date.UTC(1971,  1, 10), 1.80],
+								[Date.UTC(1971,  1, 18), 1.80],
+								[Date.UTC(1971,  1, 24), 1.92],
+								[Date.UTC(1971,  2,  4), 2.49],
+								[Date.UTC(1971,  2, 11), 2.79],
+								[Date.UTC(1971,  2, 15), 2.73],
+								[Date.UTC(1971,  2, 25), 2.61],
+								[Date.UTC(1971,  3,  2), 2.76],
+								[Date.UTC(1971,  3,  6), 2.82],
+								[Date.UTC(1971,  3, 13), 2.8 ],
+								[Date.UTC(1971,  4,  3), 2.1 ],
+								[Date.UTC(1971,  4, 26), 1.1 ],
+								[Date.UTC(1971,  5,  9), 0.25],
+								[Date.UTC(1971,  5, 12), 0   ]
+							]
+						}, {
+							name: 'via Twitter',
+							data: [
+								[Date.UTC(1970,  9, 18), 0   ],
+								[Date.UTC(1970,  9, 26), 0.2 ],
+								[Date.UTC(1970, 11,  1), 0.47],
+								[Date.UTC(1970, 11, 11), 0.55],
+								[Date.UTC(1970, 11, 25), 1.38],
+								[Date.UTC(1971,  0,  8), 1.38],
+								[Date.UTC(1971,  0, 15), 1.38],
+								[Date.UTC(1971,  1,  1), 1.38],
+								[Date.UTC(1971,  1,  8), 1.48],
+								[Date.UTC(1971,  1, 21), 1.5 ],
+								[Date.UTC(1971,  2, 12), 1.89],
+								[Date.UTC(1971,  2, 25), 2.0 ],
+								[Date.UTC(1971,  3,  4), 1.94],
+								[Date.UTC(1971,  3,  9), 1.91],
+								[Date.UTC(1971,  3, 13), 1.75],
+								[Date.UTC(1971,  3, 19), 1.6 ],
+								[Date.UTC(1971,  4, 25), 0.6 ],
+								[Date.UTC(1971,  4, 31), 0.35],
+								[Date.UTC(1971,  5,  7), 0   ]
+							]
+						}, {
+							name: 'via web',
+							data: [
+								[Date.UTC(1970,  9,  9), 0   ],
+								[Date.UTC(1970,  9, 14), 0.15],
+								[Date.UTC(1970, 10, 28), 0.35],
+								[Date.UTC(1970, 11, 12), 0.46],
+								[Date.UTC(1971,  0,  1), 0.59],
+								[Date.UTC(1971,  0, 24), 0.58],
+								[Date.UTC(1971,  1,  1), 0.62],
+								[Date.UTC(1971,  1,  7), 0.65],
+								[Date.UTC(1971,  1, 23), 0.77],
+								[Date.UTC(1971,  2,  8), 0.77],
+								[Date.UTC(1971,  2, 14), 0.79],
+								[Date.UTC(1971,  2, 24), 0.86],
+								[Date.UTC(1971,  3,  4), 0.8 ],
+								[Date.UTC(1971,  3, 18), 0.94],
+								[Date.UTC(1971,  3, 24), 0.9 ],
+								[Date.UTC(1971,  4, 16), 0.39],
+								[Date.UTC(1971,  4, 21), 0   ]
+							]
+						}]
+					});
+				}, 1000);
+			});
+			$('#view').on('click', function() {
+				$('body').removeClass('mgmt');
+			});
+
+		</script>
+	</body>
+</html>

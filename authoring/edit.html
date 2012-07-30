@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+		<title>Nouncy</title>
+
+		<link rel="stylesheet" href="../lib/font-awesome/css/font-awesome.css">
+		<style>
+			* {
+				/*box-sizing: border-box;*/
+			}
+			html {
+				background: url(patagonia-bg.jpg) no-repeat center center fixed;
+				-webkit-background-size: cover;
+			}
+			body {
+				margin: 1em;
+				font-family: "Helvetica Neue", Helvetica, sans-serif;
+				font-size: 100%;
+				line-height: 1.75em;
+				color: #333;
+				-webkit-font-smoothing: antialiased;
+				overflow-x: hidden;
+			}
+			[contenteditable]:focus {
+				outline-style: none;
+			}
+			[tabindex]:focus {
+				outline: 3px solid Orange;
+			}
+			#page {
+				position: relative;
+				width: 960px;
+				margin: 0 auto;
+				background-color: WhiteSmoke;
+				border-radius: .5em;
+				box-shadow: 0 .2em 1em rgba(0, 0, 0, .5);
+				opacity: 1;
+				-webkit-transition: opacity 2s;
+			}
+			#page.loading {
+				visibility: hidden;
+				opacity: 0;
+			}
+			#content {
+				margin-right: 300px;
+				padding: 1rem;
+			}
+			#content .summary,
+			#content .widget,
+			#content .text > p,
+			#content .create {
+				margin: 0;
+				padding: .5rem 1rem;
+			}
+			#content .summary {
+				font-size: 1.4em;
+			}
+			#content .create {
+				padding: 0;
+			}
+			#content .widget {
+				position: relative;
+				overflow-y: hidden;
+				-webkit-transition: height .5s;
+			}
+			#content .widget > * {
+				position: absolute;
+				top: .5rem;
+				right: 1rem;
+				left: 1rem;
+				margin: 0;
+				padding: 0;
+				opacity: 0;
+				-webkit-transition: opacity .25s;
+				border-top: 1px dashed transparent;
+				border-bottom: 1px dashed transparent;
+			}
+			#content .widget:not(:focus) > .view,
+			#content .widget:focus > .edit {
+				opacity: 1;
+			}
+			#content .widget:focus > .edit {
+				-webkit-transition-delay: .25s;
+			}
+			#content .widget .view {
+				border-top-color: Silver;
+				border-bottom-color: Silver;
+			}
+			#page aside {
+				position: absolute;
+				top: 0;
+				right: 0;
+				bottom: 0;
+				width: 300px;
+				background-color: #eee;
+				border-left: 1px solid #ddd;
+				border-radius: 0 .5em .5em 0;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="page" class="loading">
+			<div id="content">
+				<p class="summary" contenteditable="true">
+					Al je spullen veilig meenemen in de tassen van Patagonia: waterproof, stevig en altijd groot genoeg. De Black Hole Duffel was al verkrijgbaar met een inhoud van 60, 90 en 120 liter, maar is er nu ook in een kleinere uitvoering van 45 liter. Handig voor de sportschool of als handbagage in het vliegtuig. De Patagonia Atacama is dit seizoen in verschillende vrolijke kleuren te koop, maar ook in ingetogen zwart en grijs.
+				</p>
+				<div class="image widget" tabindex="0">
+					<div class="view">
+						[images view mode]
+					</div>
+					<dl class="edit">
+						<dt>images</dt>
+						<dd>
+							<div class="new">&hellip;</div>
+						</dd>
+						<dt>presentation</dt>
+						<dd>
+							<label><input type="radio" name="presentation" tabindex="-1"> large</label>
+						</dd>
+					</dl>
+				</div>
+				<div class="tweet widget" tabindex="0">
+					<div class="view">
+						[tweet view mode]
+					</div>
+					<div class="edit">
+						[tweet edit mode]<br>
+						[..........]
+					</div>
+				</div>
+				<div class="text" contenteditable="true">
+					<p>
+						De Black Hole Duffel is gemaakt van stevig waterproof materiaal, waardoor de tas bestand is tegen regen en andere weersomstandigheden De U-vormige opening geeft toegang tot het grote vak. De tas heeft ook twee kleinere vakken van gaas aan de binnenkant. Door het gaas kun je precies zien wat er in zit en heb je je belangrijke spullen altijd makkelijk bij de hand. Met een stevige onderkant voor extra bescherming. Handig als handbagage, maar evengoed bestand tegen het ruwe gooi-en smijtwerk in een bagageruim, trein of boot.
+					</p>
+					<p>
+						De Black Hole Duffel familie is nu uitgebreid met een klein broertje. De tas is ook verkrijgbaar in een 45liter variant, naast de uitvoeringen van 60, 90 en 120 liter. Dezelfde kwaliteit en stevigheid als je gewend bent van de tassen van Patagonia, maar dan een maatje kleiner. De kleine tas is mee te nemen als handbagage in het vliegtuig, maar is evengoed bestand tegen een ruwe behandeling in het bagageruim. De drie grotere tassen van 60, 90 en 120 liter hebben twee schouderbanden, zodat de tas als rugzak gedragen kan worden.
+					</p>
+				</div>
+				<div class="create" tabindex="0">
+				</div>
+				<div class="text" contenteditable="true">
+					<p>
+						De Black Hole Duffel is gemaakt van stevig waterproof materiaal, waardoor de tas bestand is tegen regen en andere weersomstandigheden De U-vormige opening geeft toegang tot het grote vak. De tas heeft ook twee kleinere vakken van gaas aan de binnenkant. Door het gaas kun je precies zien wat er in zit en heb je je belangrijke spullen altijd makkelijk bij de hand. Met een stevige onderkant voor extra bescherming. Handig als handbagage, maar evengoed bestand tegen het ruwe gooi-en smijtwerk in een bagageruim, trein of boot.
+					</p>
+				</div>
+			</div>
+			<aside></aside>
+		</div>
+		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.js"></script>
+		<script>
+
+			jQuery(function($) {
+
+				var setHeight = function(mode) {
+					$(this).height($(this).children('.' + mode).outerHeight());
+				};
+				var curry = function(f) {
+					var args = $.makeArray(arguments).slice(1);
+					return function() {
+						return f.apply(this, $.merge(args, arguments));
+					};
+				};
+
+				$('#content .widget').
+					each(curry(setHeight, 'view')).
+					on('focus', curry(setHeight, 'edit')).
+					on('blur', curry(setHeight, 'view'));
+
+				$('#page').removeClass('loading');
+
+				$('#content [contenteditable], #content [tabindex]').first().focus();
+
+			});
+
+		</script>
+	</body>
+</html>
