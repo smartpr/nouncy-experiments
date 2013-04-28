@@ -62,6 +62,22 @@ $('body > h1').on('blur', function() {
 
 $('#story > .text').htmleditable('native', ['bold']);
 
+var sel;
+var showTooltip = _.debounce(function() {
+		if (sel) rangy.removeMarkers(sel);
+		sel = rangy.saveSelection();
+		var offset = $('#' + (sel.rangeInfos[0].markerId || sel.rangeInfos[0].endMarkerId)).offset();
+		$('#tools').css({
+			display: 'block',
+			top: offset.top - 50,
+			left: offset.left - $('#tools').width() / 2
+		});
+	}, 1000);
+$('#story > .text').on('mousedown keydown', function() {
+	$('#tools').css('display', 'none');
+	showTooltip();
+});
+
 var api = new NouncyApi();
 
 var root = $('#story')[0];

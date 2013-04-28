@@ -70,6 +70,9 @@
 				margin: 0 .5em;
 				outline: 0 none;
 			}
+			#story .text .rangySelectionBoundary {
+				display: inline !important;
+			}
 			#story .text:first-child > p:first-child {
 				font-size: 1.5em;
 			}
@@ -155,11 +158,10 @@
 				bottom: 0;
 			}
 			#tools {
-				position: fixed;
-				right: 0;
-				bottom: 0;
-				left: 0;
+				position: absolute;
 				height: 2em;
+				width: 12em;
+				display: none;
 				text-align: center;
 				background-color: rgba(0, 0, 0, .5);
 				z-index: 100;
@@ -196,6 +198,7 @@
 		<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 <!--		<script src="./rangy-1.2.3/uncompressed/rangy-core.js"></script>
 		<script src="./rangy-1.2.3/uncompressed/rangy-selectionsaverestore.js"></script>-->
+		<script src="http://underscorejs.org/underscore.js"></script>
 		<script src="./jquery.htmleditable.standalone.js"></script>
 		<script src="./ba-smallwalker.js"></script>
 		<script src="./ba-smallwalker_inverted.js"></script>
