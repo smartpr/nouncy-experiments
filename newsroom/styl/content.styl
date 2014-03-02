@@ -1,0 +1,156 @@
+main article {
+	font-family: minion-pro, serif;
+	font-size: 1.4em;
+	line-height: 1.5;
+	letter-spacing: .01rem;
+
+	h1,
+	h2,
+	h3 {
+		font-family: jaf-bernino-sans, sans-serif;
+		font-weight: 700;
+		line-height: 1.4;
+	}
+	h1 {
+		font-size: 2em;
+	}
+	h2 {
+		font-size: 1.8em;
+	}
+	h3 {
+		font-size: 1.4em;
+	}
+
+	figure {
+		img,
+		iframe {
+			width: 100%;
+		}
+		figcaption {
+			font-family: jaf-bernino-sans, sans-serif;
+			font-size: .6em;
+			text-align: left;
+		}
+	}
+
+	[data-widget] {
+		position: relative;
+
+		.content {
+			width: 100%;
+		}
+	}
+
+	[data-widget="header-image"] {
+		width: 100% !important;
+
+		figure {
+			max-height: 100vh;
+			overflow-y: hidden;
+
+			background-repeat: no-repeat;
+			background-position: 50% 50%;
+			background-size: cover;
+			img {
+				visibility: hidden;
+			}
+			figcaption {
+				position: absolute;
+				right: 0;
+				bottom: 0;
+				padding: .5em 1em;
+
+				color: rgba(255, 255, 255, .7);
+				background-color: rgba(0, 0, 0, .3);
+			}
+		}
+		h1,
+		h2 {
+			position: absolute;
+			right: 0;
+			bottom: 0;
+			left: 0;
+
+			margin: 0;
+			padding: .7em 1.4em;
+
+			color: White;
+
+			// We have to explicitly put the heading on top of the rest to
+			// allow itself to put an "overlay" behind its content (the
+			// heading text). See [this proof of
+			// concept](http://jsbin.com/gikiduwo/1/edit).
+			z-index: 1;
+		}
+		&.overlay {
+			figcaption {
+				background-color: transparent;
+				z-index: 2;
+			}
+			h1,
+			h2 {
+				&:before {
+					content: "";
+
+					position: absolute;
+					top: -30%;
+					right: 0;
+					bottom: 0;
+					left: 0;
+
+					background-image: linear-gradient(top,
+						rgba(0, 0, 0, 0),
+						rgba(0, 0, 0, .5) 20%,
+						rgba(0, 0, 0, .75) 40%,
+						rgba(0, 0, 0, 1));
+
+					// To adjust the darkness of the overlay we can limit
+					// ourself to tweaking the opacity.
+					opacity: .4;
+
+					z-index: -1;
+				}
+			}
+		}
+	}
+
+	header {
+		.social {
+			z-index: 1;
+			a {
+				display: inline-block;
+				width: 35px;
+				height: 35px;
+
+				transition: fill .5s;
+			}
+		}
+	}
+
+	.body {
+		position: relative;
+
+		& > p {
+			font-family: jaf-bernino-sans, sans-serif;
+			font-size: 1.1em;
+
+			& ~ p {
+				// Override settings that only apply to first paragraph.
+				font-family: inherit;
+				font-size: 1em;
+			}
+		}
+	}
+
+	footer {
+		border-top: 1px solid #ccc;
+
+		font-family: jaf-bernino-sans, sans-serif;
+		font-size: .6em;
+		color: #999;
+
+		margin-top: 3em;
+		padding: 1em 0;
+	}
+
+}

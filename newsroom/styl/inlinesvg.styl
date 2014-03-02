@@ -1,0 +1,9 @@
+// TODO: Fallback approach for `img[data-inlinesvg]` elements? We don't
+// explicitly aim to support IE8 so perhaps we shouldn't care.
+
+// TODO: Generic way of making sure that inlined filter SVG is always hidden?
+
+html.inlinesvg :not(img)[data-inlinesvg] {
+	// TODO: Replace with `.ir`'s technique.
+	color: transparent !important;
+}

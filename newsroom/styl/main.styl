@@ -1,0 +1,120 @@
+// HTML5 Boilerplate base sheet (`main.css`) overrides and customizations.
+
+// ::-moz-selection {
+// 	background: rgba(255, 255, 255, .41);;
+// }
+// ::selection {
+// 	background: rgba(255, 255, 255, .41);;
+// }
+
+// Upcoming versions of H5BP no longer holds an image replacement helper class,
+// but we are still using it here and there, so include the implementation that
+// we have used in our current code base. ([See
+// here](http://jsbin.com/capoj/1/edit) for a comparison example with another
+// method.)
+.ir { 
+	display: block;
+	border: 0;
+	text-indent: -999em;
+	overflow: hidden; 
+	background-color: transparent;
+	background-repeat: no-repeat;
+	text-align: left;
+	direction: ltr;
+	*line-height: 0;
+}
+
+// Site wide defaults.
+
+// TODO: We have to bring some consistency into our use of "Nouncy blue";
+// currently [we are using (too) many shades of
+// it](http://jsbin.com/vegabuzi/1/edit).
+a:link {
+	color: #8ec4fe;
+}
+a:visited {
+	color: darken(#8ec4fe, 10%);
+}
+a:hover, a:focus {
+	color: lighten(#8ec4fe, 10%);
+}
+a:focus {
+	outline: 0 none;
+}
+// TODO: `:active` state?
+
+.browsehappy {
+	position: absolute;
+	top: 0;
+	right: 0;
+	left: 0;
+	margin: 0;
+	padding: .3em .5em .5em .5em;
+	font-size: .8em;
+	border-bottom: 1px solid #cc8100;
+	text-align: center;
+	z-index: 1;
+	behavior: url("/lib/PIE.htc");
+	// Stylus will expand `linear-gradient` into several vendor-prefixed
+	// variants, which is pointless but doesn't hurt either.
+	-pie-background: linear-gradient(#ffd400, #ffa500);
+}
+
+// Allow the IE<9-required way of disabling user selection to be leading.
+[unselectable="on"] {
+	-webkit-touch-callout: none;
+	user-select: none;
+}
+
+// Anything that feels like a button and includes an `:active` styling (and
+// handles a touch event) doesn't need a tap highlight.
+.touchbutton {
+	-webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+	// Disable text selection but not touch callouts as those are very functional
+	// in case of hyperlinks.
+	user-select: none;
+}
+
+// Not really sure why using a non-default font rendering method seems to have
+// overall better results, but I have yet to witness an example that refutes
+// this assumption.
+body {
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+	text-rendering: optimizeLegibility;
+}
+// Buttons (and therefore maybe also other form elements?) sometimes seem to
+// not inherit one (or both?) of these declarations.
+button, input, select, textarea {
+	-webkit-font-smoothing: inherit;
+	-moz-osx-font-smoothing: inherit;
+	text-rendering: inherit;
+}
+
+// These tend to make laying out inline SVG more intuitive.
+svg:not(:root) {
+	// In most browsers inline SVG elements without dimensions just adopt the
+	// width and height of its container, [except in
+	// Firefox](http://jsbin.com/nawim/1/edit). Explicitly setting width and
+	// height normalizes this behavior.
+	width: 100%;
+	height: 100%;
+	// If the SVG element is an inline block, [we usually want it to vertically
+	// align nicely with the inline elements around
+	// it](http://jsbin.com/xexit/1/edit), especially given the fact that the
+	// SVG element will fill up the entire height of its layout parent by
+	// default.
+	vertical-align: middle;
+	// Inline SVG elements without colors defined inside should by default use
+	// the color that is defined higher up the DOM tree (such as at `#page`).
+	// We need to tell to inherit here explicitly or it will not work.
+	fill: inherit;
+}
+
+main {
+	position: relative;
+	font-family: effra, sans-serif;
+	font-weight: 400;
+	color: #333;
+	fill: #333;
+}

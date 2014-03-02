@@ -1,0 +1,217 @@
+@import "./define";
+
+main nav {
+	position: absolute;
+	top: 0;
+	right: 0;
+	left: 0;
+	height: 50px;
+
+	color: White;
+
+	// TODO: Not entirely sure why this is necessary. I guess it has got
+	// something to do with the fact that `#content` is GPU-transformed(?)
+	// z-index: 1;
+
+	.action {
+		padding: 0 1em;
+		line-height: 50px;
+
+		transition: background-color .5s;
+		background-color: lighten(#aaa, 20%);
+		&:hover {
+			background-color: #aaa;
+		}
+	}
+
+	// Hover transformations.
+
+	.subscribe, .drawer {
+		transform: translate3d(0, 0, 0);
+		transition: transform 1s ease-out;
+	}
+	// Make sure we don't lose the existing transition on `.subscribe`.
+	.subscribe {
+		transition: background-color .5s, transform 1s ease-out;
+	}
+	.explain {
+		// Work around the ugly Chrome glitch in which there is a noticable one
+		// pixel translation at the end of an opacity transition.
+		transform: translateZ(0);
+
+		transition: opacity 1s ease-in 2s;
+	}
+	&:not(:hover) {
+		.subscribe {
+			transform: translate3d(-100%, 0, 0);
+		}
+		.drawer {
+			transform: translate3d(100%, 0, 0);
+		}
+		.explain {
+			opacity: 0;
+		}
+	}
+
+	.author {
+		display: inline-block;
+		height: 100%;
+
+		a {
+			display: inline-block;
+			height: 100%;
+
+			outline: 0 none;
+			color: inherit;
+
+			text-decoration: none;
+			white-space: nowrap;
+			vertical-align: middle;
+		}
+
+		.newsroom {
+			// Make sure we overlay the subscribe button that follows this
+			// element.
+			position: relative;
+			z-index: 1;
+
+			& > * {
+				vertical-align: top;
+			}
+
+			img {
+				min-height: 100%;
+				// Golden ratio heh 8-)
+				max-height: 162%;
+			}
+
+			.description {
+				display: inline-block;
+				height: 100%;
+				line-height: 1;
+
+				box-sizing: border-box;
+				padding: 9px 17px 0 12px;
+
+				h1 {
+					margin: 0;
+					font-size: inherit;
+					font-weight: inherit;
+				}
+				.count {
+					color: rgba(255, 255, 255, .8);
+					font-size: .7em;
+					text-transform: uppercase;
+					letter-spacing: .01em;
+				}
+				transition: background-color .5s;
+				background-color: lighten(#8ec4fe, 20%);
+			}
+			&:hover .description {
+				background-color: #8ec4fe;
+			}
+		}
+	}
+
+	.nouncy {
+		position: absolute;
+		top: 0;
+		right: 0;
+		bottom: 0;
+
+		overflow-x: hidden;
+
+		// Reserve some space for version flag and logo that is attached to the
+		// side (thus not in the flow).
+		box-sizing: border-box;
+		padding: 0 20px 0 355px;
+
+		text-align: right;
+
+		.drawer {
+			display: inline-block;
+			height: 100%;
+		}
+
+		a {
+			display: inline-block;
+
+			outline: 0 none;
+
+			white-space: nowrap;
+			vertical-align: middle;
+
+			&:not(.explain) {
+				color: inherit;
+				text-decoration: none;
+			}
+		}
+		.explain {
+			position: absolute;
+			width: 19em;
+			left: -@width;
+			
+			text-align: center;
+			line-height: 50px;
+
+			box-sizing: border-box;
+			// Adjust for the space taken by the logo.
+			padding-right: 55px;
+
+			color: #8ec4fe;
+			background-color: rgba(255, 255, 255, .9);
+			&:not(:hover) {
+				text-decoration: none;
+			}
+		}
+		.logo {
+			position: absolute;
+			left: -55px;
+
+			height: 100%;
+
+			background-color: rgb(42, 52, 56);
+			transition: fill .5s;
+			fill: White;
+			&:focus, &:hover, &:active {
+				fill: #8ec4fe;
+			}
+
+			svg {
+				width: 35px;
+				margin: 0 10px 0 10px;
+			}
+		}
+		.version {
+			position: absolute;
+			top: 0;
+			right: -50px;
+			width: 50px;
+			height: 20px;
+			// 18 looks better than 20.
+			line-height: 18px;
+
+			// Adjust center alignment slightly to make it appear better
+			// centered.
+			box-sizing: border-box;
+			padding-left: 2px;
+
+			// Left top corner is now at right top corner of `a.logo`, so
+			// if we rotate 90 degrees clockwise around that point we end
+			// up with the desired result.
+
+			// We use rotation instead of `writing-mode` because rotation
+			// has better support (Firefox).
+			transform: rotate(90deg);
+			transform-origin: left top;
+
+			text-transform: uppercase;
+			font-size: .6em;
+			letter-spacing: .3em;
+			text-align: center;
+
+			color: rgba(255, 255, 255, .4);
+			background-color: rgb(34, 39, 41);
+		}
+	}
+}

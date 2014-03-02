@@ -1,0 +1,48 @@
+flour = require 'flour'
+
+# Overwrite default `styl` compiler because we need a custom version:
+# * We want to be able to explicitly decide in our style sheet whether we want
+#   to compile a file as data URL or not.
+# * We always want to import `nib`.
+flour.compilers.install 'styl', (file, cb) ->
+	stylus = require 'stylus'
+	nib = require 'nib'
+
+	options =
+		filename: file.name
+		paths: [file.dir]
+		compress: @compress ? yes
+
+	file.read (code) ->
+		renderer = stylus code, options
+		renderer.define 'inline-url', stylus.url()
+		renderer.use nib()
+		renderer.import 'nib'
+		renderer.render (err, css) ->
+			throw err if err
+			cb css
+
+task "build:article", ->
+	bundle [
+		'styl/main.styl'
+		'styl/inlinesvg.styl'
+		'styl/nav.styl'
+		'styl/content.styl'
+		'styl/article.styl'
+	], 'css/article.css'
+	bundle [
+		'coffee/inlinesvg.coffee'
+	], 'js/article.js'
+
+task "build:bulletin", ->
+	bundle [
+		'styl/main.styl'
+		'styl/inlinesvg.styl'
+		'styl/nav.styl'
+		'styl/content.styl'
+		'styl/bulletin.styl'
+	], 'css/bulletin.css'
+	bundle [
+		'coffee/inlinesvg.coffee'
+		'coffee/parallax.coffee'
+	], 'js/bulletin.js'

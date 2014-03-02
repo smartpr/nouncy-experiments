@@ -1,0 +1,64 @@
+main {
+	padding: 5em 0;
+
+	article {
+		max-width: 35em;
+		padding-left: 3em;
+		margin: 0 auto;
+
+		header {
+			position: relative;
+			.social {
+				position: absolute;
+				top: 10px;
+				left: -110px;
+
+				a {
+					fill: rgba(0, 0, 0, .4);
+					&:hover {
+						fill: rgba(0, 0, 0, .6);
+					}
+				}
+			}
+		}
+
+		.body {
+			& > p ~ p {
+				max-width: 70%;
+			}
+
+			& > [data-widget] {
+				figcaption {
+					position: absolute;
+					right: 0;
+					bottom: 0;
+					padding: .5em 1em;
+
+					color: rgba(255, 255, 255, .7);
+					background-color: rgba(0, 0, 0, .3);
+				}
+
+				& ~ [data-widget] {
+					.content {
+						width: 70%;
+					}
+
+					figcaption {
+						position: absolute;
+						top: .5em;
+						right: 0;
+						width: 25%;
+						padding: .5em 0;
+
+						// Override styling that only applies to first widget.
+						color: #999;
+						background-color: transparent;
+
+						border-top: 1px solid #ccc;
+					}
+				}
+			}
+		}
+
+	}
+}

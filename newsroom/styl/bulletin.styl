@@ -1,0 +1,48 @@
+main article {
+
+	text-align: center;
+
+	header {
+		margin-bottom: 2em;
+
+		// max-height: 100vh !important;
+		min-height: 300px !important;
+
+		position: relative;
+		.social {
+			position: absolute;
+			bottom: 15px;
+			left: 10px;
+
+			a {
+				fill: rgba(255, 255, 255, .7);
+				&:hover {
+					fill: rgba(255, 255, 255, .9);
+				}
+			}
+		}
+	}
+
+	.body {
+		& > * {
+			width: 25em;
+			margin-left: auto;
+			margin-right: auto;
+		}
+
+		& > [data-widget]:not([data-widget="header-image"]) {
+			figcaption {
+				position: absolute;
+				top: 0;
+				width: 10em;
+				right: -@width - 1em;
+				padding: .5em 0;
+
+				color: #999;
+
+				border-top: 1px solid #ccc;
+			}
+		}
+	}
+
+}

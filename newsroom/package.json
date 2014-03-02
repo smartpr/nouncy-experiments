@@ -1,0 +1,12 @@
+{
+  "name": "nouncy-newsroom",
+  "version": "0.0.0",
+  "description": "Nouncy for newsrooms prototype",
+  "devDependencies": {
+    "coffee-script": "~1.7.1",
+    "flour": "~0.5.7",
+    "stylus": "~0.42.2",
+    "nib": "~1.0.2",
+    "uglify-js": "~2.4.12"
+  }
+}
