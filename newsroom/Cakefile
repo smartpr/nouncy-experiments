@@ -46,3 +46,22 @@ task "build:bulletin", ->
 		'coffee/inlinesvg.coffee'
 		'coffee/parallax.coffee'
 	], 'js/bulletin.js'
+
+task "build:slideshow", ->
+	bundle [
+		'styl/main.styl'
+		'styl/inlinesvg.styl'
+		'styl/calltoaction.styl'
+		'styl/slider.styl'
+		'styl/nav.styl'
+		'styl/content.styl'
+		'styl/slideshow.styl'
+
+		# 'styl/phoneview.styl'
+	], 'css/slideshow.css'
+	bundle [
+		'coffee/inlinesvg.coffee'
+		'coffee/slider.coffee'
+
+		# 'coffee/phoneview.coffee'
+	], 'js/slideshow.js'

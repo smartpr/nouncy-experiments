@@ -1,200 +1,180 @@
-@import "define";
+main article {
 
-// By using `left` and `right` instead of `translate3d(0, 0, 0)` we (may) lose
-// hardware acceleration, but what we get in return is the possibility of
-// defining these animations generically, without the script having to provide
-// us with the coordinates for rightside overshooting. This animation is
-// sufficiently lightweight that the software path feels just fine.
-@keyframes overshoot-left {
-	30% {
-		left: 5em;
-	}
-	100% {
-		left: 0;
-	}
-}
-@keyframes overshoot-right {
-	30% {
-		right: 5em;
-	}
-	100% {
-		right: 0;
-	}
-}
-
-#content {
-	// We need to be able to retrieve the position of a slide relative to the
-	// slider, so we know by how many pixels the slider should be moved in
-	// order to get a slide into view.
-	position: relative;
-
-	// Make sure that the slider fills the entire document because the slider
-	// is the one that listens for touch events.
-	height: 100%;
-
-	list-style-type: none;
-	margin: 0;
-	padding: 0;
-
-	white-space: nowrap;
-
-	// Will be overwritten by script upon sliding, but by doing this we don't
-	// have to question whether hardware acceleration will be enabled from the
-	// very beginning, even before the first slide.
-	transform: translate3d(0, 0, 0);
-	// [Needed for iOS 5 and earlier](http://jbkflex.wordpress.com/2012/02/16/
-	// replicating-the-swipe-gesture-iphone-gallery-for-mobile-web-html5-
-	// flickering-issue-fixed/)
-	backface-visibility: 'hidden';
-	perspective: 1000;
-
-	&.animate {
-		transition: transform .4s;
-		// For some silly reason in Firefox these transitions feel a lot
-		// quicker, too quick actually.
-		-moz-transition-duration: .6s;
-	}
-	&.overshoot-left {
-		animation-name: overshoot-left;
-		animation-duration: .3s;
-	}
-	&.overshoot-right {
-		animation-name: overshoot-right;
-		animation-duration: .3s;
-	}
-
-	& > li {
-		// Content in slides should never be positioned relative to the slider.
-		position: relative;
-
-		// Allow the slide to have padding without it messing with the slider
-		// setup.
-		box-sizing: border-box;
-
-		width: 100%;
-		height: 100%;
-
+	header .social {
 		display: inline-block;
 
-		vertical-align: top;
-
-		overflow-x: visible;
-		// We cannot set `overflow-y` to `hidden` because in combination with
-		// `overflow-x: visible` [the weird result is horizontal scrollability]
-		// (http://jsbin.com/ifotar/1/edit).
-		overflow-y: visible;
-
-		white-space: normal;
-
-		// Invisible slides are actually hidden only in keyboard interaction
-		// mode, to prevent content in out-of-view slides from being focusable
-		// by tabbing to them. In case of touch interaction we definitely want
-		// all slides to have visibility because it would mess with the
-		// slider's hardware acceleration otherwise. If no interaction has
-		// taken place yet we can safely assume no keyboard interaction because
-		// before something can be messed up by tabbing the tabbing itself will
-		// have switched us to keyboard interaction mode.
-		#page:not(.last-interaction-key) &.invisible {
-			visibility: visible;
+		a {
+			fill: rgba(255, 255, 255, .7);
+			&:hover {
+				fill: rgba(255, 255, 255, .9);
+			}
 		}
 	}
+
+	[data-widget="image"] {
+
+		figure {
+			position: absolute;
+			top: 0;
+			right: 0;
+			bottom: 0;
+			left: 0;
+
+			img {
+				visibility: hidden;
+			}
+			.projection {
+				position: absolute;
+				top: 0;
+				right: 0;
+				bottom: 0;
+				left: 0;
+
+				background-size: cover;
+				background-repeat: no-repeat;
+				background-position: 50% 50%;
+			}
+		}
+
+		.underlay-me {
+			z-index: 1;
+		}
+
+		&.overlay {
+			figcaption {
+				background-color: transparent;
+				z-index: 2;
+			}
+			.underlay-me {
+				&:before {
+					content: "";
+
+					position: absolute;
+					top: -30%;
+					right: 0;
+					bottom: 0;
+					left: 0;
+
+					background-image: linear-gradient(top,
+						rgba(0, 0, 0, 0),
+						rgba(0, 0, 0, .5) 20%,
+						rgba(0, 0, 0, .75) 40%,
+						rgba(0, 0, 0, 1));
+
+					// To adjust the darkness of the overlay we can limit
+					// ourself to tweaking the opacity.
+					opacity: .4;
+
+					z-index: -1;
+				}
+			}
+		}
+	}
+
+	.body {
+		position: absolute;
+		right: 0;
+		bottom: 0;
+		left: 0;
+
+		padding: 0 1.4em 1em 1.4em;
+
+		color: White;
+
+		// This table magic is really a hack - [this proof of concept] may shed
+		// some light on what's going on.
+
+		&.button-with-heading {
+			// This slides part of the overlay out of the viewport, but as long
+			// the gradient curve is flat in the text part this doesn't really
+			// change anything in practice.
+			margin-bottom: -50px;
+			h1,
+			h2 {
+				display: table-row;
+			}
+			.calltoaction {
+				position: relative;
+				top: -50px;
+			}
+		}
+
+		.text-and-button {
+			display: table-row;
+			& > * {
+				display: table-cell;
+			}
+			& > .text {
+				width: 100%;
+				a {
+					color: White;
+				}
+			}
+			& > .button {
+				vertical-align: bottom;
+				padding-left: 1em;
+				padding-bottom: .25em;
+			}
+		}
+
+		& > h1,
+		& > h2,
+		& > p {
+			margin-top: 0;
+			& ~ h1,
+			& ~ h2,
+			& ~ p {
+				margin-top: inherit;
+			}
+		}
+	}
+
 }
 
-#prev, #next {
+// TODO: Move generic styling to `slider.styl`(?)
+#slidenav {
 	position: absolute;
-	top: 310px;
-	width: 50px;
-	height: 100px;
-	@media phone {
-		top: 95px;
-		width: 30px;
-		height: 60px;
-	}
-
-	appearance: none;
-	border: 0 none;
-	padding: 0;
-	// Do not use `margin-top` here as that one is reserved for our window fill
-	// script.
-
-	color: inherit;
-	background-color: rgba(42, 52, 56, .4);
-	&:not(.eager) {
-		@media phone {
-			background-color: rgba(42, 52, 56, .15);
-		}
-	}
-
-	svg {
-		transition: fill .2s ease-in;
-		height: 45%;
-	}
-
-	&:hover, &:focus {
-		background-color: rgba(42, 52, 56, .7);
-	}
-	&:hover, &:active, &.active {
-		color: #32cbfd;
-		fill: #32cbfd;
-	}
-	&.active {
-		svg {
-			// When active state is triggered programmatically we skip the
-			// transition because color transitions do not feel right if you
-			// are not interacting with the actual element itself.
-			transition-duration: 0;
-		}
-	}
-
-	outline: 0 none;
-
-	transition: background-color .2s, left .4s ease-out, right .4s ease-out;
-	#content.animate ~ & {
-		// If slide animation is enabled, do not start reappearing before
-		// target slide is completely in view. This makes for a cleaner, less
-		// noisy experience.
-		transition-delay: 0, .4s, .4s;
-	}
-}
-
-#prev {
-	left: 0;
-
-	#content.first-slide ~ & {
-		// Navigation buttons that disappear should not wait until the slide
-		// transition has terminated because we want to avoid giving the
-		// impression that the button exists in the context of the new slider
-		// position.
-		transition-delay: 0, 0, 0;
-		left: -50px;
-		@media phone {
-			left: -30px;
-		}
-	}
-}
-
-@keyframes eager-right {
-	0% {
-		transform: translate3d(0, 0, 0);
-	}
-	100% {
-		transform: translate3d(20%, 0, 0);
-	}
-}
-#next {
+	top: 0;
 	right: 0;
+	left: 0;
+	height: 50px;
+	line-height: 50px;
+	letter-spacing: .2em;
+	text-align: center;
+	z-index: 2;
 
-	#content.last-slide ~ & {
-		transition-delay: 0, 0, 0;
-		right: -50px;
-		@media phone {
-			right: -30px;
-		}
+	pointer-events: none;
+	& > div {
+		display: inline-block;
+		pointer-events: auto;
 	}
 
-	&.eager {
-		// Firefox always requires a unit behind a time in `animation`, even
-		// for zero!
-		animation: eager-right 1s ease-out 0s infinite alternate;
+	button {
+		outline: 0 none;
+		white-space: nowrap;
+		display: inline-block;
+		vertical-align: middle;
+		appearance: none;
+		margin: 0;
+		padding: 0;
+		border: 0 none;
+		width: 10px;
+		height: 10px;
+		border-radius: 5px;
+		background-color: rgba(42, 52, 56, .4);
+		cursor: pointer;
+
+		// TODO: Do not include `:focus` until we have meshed out how it should
+		// behave in combination with keyboard navigation. When clicking on a
+		// navigation button (and thus giving it the focus), and then
+		// navigating to another slide using the keyboard, the focus will still
+		// be on the clicked button, keeping it "focus highlighted", which
+		// feels weird.
+		&:hover {
+			background-color: rgba(42, 52, 56, .7);
+		}		
+		&:active, &.selected {
+			background-color: #8ec4fe;
+		}
 	}
 }

@@ -1,0 +1,47 @@
+a, button {
+	&.calltoaction {
+		display: inline-block;
+
+		appearance: none;
+		border: 0 none;
+
+		padding: 0 40px;
+		min-width: 50px;
+		height: 50px;
+		line-height: 50px;
+		letter-spacing: .05em;
+		text-transform: uppercase;
+		text-decoration: none;
+		white-space: nowrap;
+
+		font-family: effra, sans-serif;
+		font-weight: 400;
+
+		color: inherit;
+		background-color: #8ec4fe;
+		&:hover, &:focus {
+			background-color: lighten(#8ec4fe, 10%);
+		}
+		&:active {
+			background-color: darken(#8ec4fe, 10%);
+		}
+		&:active {
+			transform: scale(.95);
+			// If background color transition has not yet occurred upon active
+			// state, we most probably are dealing with a touch click, in which
+			// case the color transition should run parallel with the scaling
+			// transition (or else it feels a bit odd).
+			transition-duration: .05s, .05s;
+		}
+		transition: background-color .4s, transform .05s;
+
+		border-radius: 25px;
+		background-clip: padding-box;
+
+		box-shadow:
+			0 2px 2px rgba(0, 0, 0, .16),
+			0 0 2px rgba(0, 0, 0, .1);
+
+		outline: 0 none;
+	}
+}

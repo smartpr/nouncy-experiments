@@ -1,0 +1,197 @@
+@import "define";
+
+// The viewport or lens through which we look at the picture strip.
+main {
+	// Make the size dynamically adjust to window size. The fact that this
+	// means we have a fixed (although dynamic) height means that we can make
+	// the slides (pictures) fill this height without scripting.
+	position: absolute;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	// Just small enough to always have the top line of the title above the
+	// fold, even on iPhone 4S Safari. Just big enough to create some space in
+	// landscape orientation on phones.
+	min-height: 416px;
+	// We want the strip to move in a hardware accelerated way, so make sure
+	// that scrolling is not possible.
+	overflow-x: hidden;
+	// Whatever we put in a slide, it should never bleed out of this viewport.
+	overflow-y: hidden;
+}
+
+article {
+	// We need to be able to retrieve the position of a slide relative to the
+	// slider, so we know by how many pixels the slider should be moved in
+	// order to get a slide into view.
+	position: relative;
+
+	// Make sure that the slider fills the entire document because the slider
+	// is the one that listens for touch events.
+	height: 100%;
+
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+
+	white-space: nowrap;
+
+	// Will be overwritten by script upon sliding, but by doing this we don't
+	// have to question whether hardware acceleration will be enabled from the
+	// very beginning, even before the first slide.
+	transform: translate3d(0, 0, 0);
+	// [Needed for iOS 5 and earlier](http://jbkflex.wordpress.com/2012/02/16/
+	// replicating-the-swipe-gesture-iphone-gallery-for-mobile-web-html5-
+	// flickering-issue-fixed/)
+	backface-visibility: 'hidden';
+	perspective: 1000;
+
+	&.animate {
+		transition: transform .4s;
+		// For some silly reason in Firefox these transitions feel a lot
+		// quicker, too quick actually.
+		-moz-transition-duration: .6s;
+	}
+
+	& > * {
+		// Content in slides should never be positioned relative to the slider.
+		position: relative;
+
+		// Allow the slide to have padding without it messing with the slider
+		// setup.
+		box-sizing: border-box;
+
+		width: 100%;
+		height: 100%;
+
+		display: inline-block;
+
+		vertical-align: top;
+
+		overflow-x: visible;
+		// We cannot set `overflow-y` to `hidden` because in combination with
+		// `overflow-x: visible` [the weird result is horizontal scrollability]
+		// (http://jsbin.com/ifotar/1/edit).
+		overflow-y: visible;
+
+		white-space: normal;
+
+		// Invisible slides are actually hidden only in keyboard interaction
+		// mode, to prevent content in out-of-view slides from being focusable
+		// by tabbing to them. In case of touch interaction we definitely want
+		// all slides to have visibility because it would mess with the
+		// slider's hardware acceleration otherwise. If no interaction has
+		// taken place yet we can safely assume no keyboard interaction because
+		// before something can be messed up by tabbing the tabbing itself will
+		// have switched us to keyboard interaction mode.
+		main:not(.last-interaction-key) &.invisible {
+			visibility: visible;
+		}
+	}
+}
+
+#prev, #next {
+	position: absolute;
+	top: 50%;
+	margin-top: -50px;
+	width: 50px;
+	height: 100px;
+	@media phone {
+		top: 95px;
+		width: 30px;
+		height: 60px;
+	}
+
+	appearance: none;
+	border: 0 none;
+	padding: 0;
+	// Do not use `margin-top` here as that one is reserved for our window fill
+	// script.
+
+	color: White;
+	fill: White;
+	background-color: rgba(42, 52, 56, .4);
+	&:not(.eager) {
+		@media phone {
+			background-color: rgba(42, 52, 56, .15);
+		}
+	}
+
+	svg {
+		transition: fill .2s ease-in;
+		height: 45%;
+	}
+
+	&:hover, &:focus {
+		background-color: rgba(42, 52, 56, .7);
+	}
+	&:hover, &:focus {
+		color: #8ec4fe;
+		fill: #8ec4fe;
+	}
+	&:active, &.active {
+		color: darken(#8ec4fe, 10%);
+		fill: darken(#8ec4fe, 10%);
+	}
+	&.active {
+		svg {
+			// When active state is triggered programmatically we skip the
+			// transition because color transitions do not feel right if you
+			// are not interacting with the actual element itself.
+			transition-duration: 0;
+		}
+	}
+
+	outline: 0 none;
+
+	transition: background-color .2s, left .4s ease-out, right .4s ease-out;
+	article.animate ~ & {
+		// If slide animation is enabled, do not start reappearing before
+		// target slide is completely in view. This makes for a cleaner, less
+		// noisy experience.
+		transition-delay: 0, .4s, .4s;
+	}
+}
+
+#prev {
+	left: 0;
+
+	article.first-slide ~ & {
+		// Navigation buttons that disappear should not wait until the slide
+		// transition has terminated because we want to avoid giving the
+		// impression that the button exists in the context of the new slider
+		// position.
+		transition-delay: 0, 0, 0;
+		left: -50px;
+		@media phone {
+			left: -30px;
+		}
+	}
+}
+
+@keyframes eager-right {
+	0% {
+		transform: translate3d(0, 0, 0);
+	}
+	100% {
+		transform: translate3d(20%, 0, 0);
+	}
+}
+#next {
+	right: 0;
+
+	article.last-slide ~ & {
+		transition-delay: 0, 0, 0;
+		right: -50px;
+		@media phone {
+			right: -30px;
+		}
+	}
+
+	&.eager {
+		// Firefox always requires a unit behind a time in `animation`, even
+		// for zero!
+		animation: eager-right 1s ease-out 0s infinite alternate;
+	}
+}
