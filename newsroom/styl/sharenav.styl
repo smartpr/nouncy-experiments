@@ -1,5 +1,102 @@
 @import "./define";
 
+main {
+	background:
+		radial-gradient(black 15%, transparent 16%) 0 0,
+		radial-gradient(black 15%, transparent 16%) 8px 8px,
+		radial-gradient(rgba(255,255,255,.1) 15%, transparent 20%) 0 1px,
+		radial-gradient(rgba(255,255,255,.1) 15%, transparent 20%) 8px 9px;
+	background-color:#282828;
+	background-size:16px 16px;
+	overflow-y: hidden;
+}
+
+main.share {
+	article {
+		margin-right: 300px;
+	}
+}
+main.ambassador {
+	&:not(.share) #ambassador {
+		display: block;
+	}
+	#pagenav .nouncy .share {
+		display: none;
+	}
+}
+
+article {
+	transition: margin-right .5s;
+
+	background-color: White;
+	box-shadow: 0 0 1em rgba(0, 0, 0, .8);
+	height: 100%;
+	overflow-y: scroll;
+}
+
+#ambassador {
+	display: none;
+	position: absolute;
+	top: 5em;
+	right: 5em;
+	border-radius: 2em;
+	background-color: Orange;
+	width: 19em;
+	padding: 0 1.5em;
+	z-index: 5;
+	box-shadow: 2px 3px 5px rgba(0, 0, 0, .5);
+
+	input, button {
+		font-size: 1.4em;
+	}
+	input {
+		width: 10em;
+	}
+}
+
+#share {
+	// z-index: -1;
+	color: White;
+	position: absolute;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	width: 300px;
+	box-sizing: border-box;
+	padding: 60px 1em;
+
+	li {
+		margin: 5px 0;
+	}
+	.you {
+		background-color: Orange;
+	}
+
+	hr {
+		margin-top: 3em;
+	}
+	.channels {
+		text-align: right;
+	}
+}
+
+@keyframes emit {
+	0% {
+		transform: scale(.9);
+	}
+	100% {
+		transform: scale(1.2);
+	}
+}
+@keyframes fade {
+	0%, 100% {
+		opacity: 0;
+	}
+	10% {
+		opacity: 1;
+	}
+}
+
 #pagenav {
 	position: absolute;
 	top: 0;
@@ -43,10 +140,7 @@
 	}
 	&:not(:hover) {
 		.subscribe {
-			transform: translate3d(-100%, 0, 0);
-		}
-		.drawer {
-			transform: translate3d(100%, 0, 0);
+			// transform: translate3d(-100%, 0, 0);
 		}
 		.explain {
 			opacity: 0;
@@ -119,8 +213,6 @@
 		right: 0;
 		bottom: 0;
 
-		overflow-x: hidden;
-
 		// Reserve some space for version flag and logo that is attached to the
 		// side (thus not in the flow).
 		box-sizing: border-box;
@@ -131,16 +223,19 @@
 		.drawer {
 			display: inline-block;
 			height: 100%;
+			text-align: left;
+			background-color: Orange;
+
+			& > * {
+				display: inline-block;
+				white-space: nowrap;
+				vertical-align: middle;
+			}
+
+			// transform: translate3d(100%, 0, 0);
 		}
-
 		a {
-			display: inline-block;
-
 			outline: 0 none;
-
-			white-space: nowrap;
-			vertical-align: middle;
-
 			&:not(.explain) {
 				color: inherit;
 				text-decoration: none;
@@ -164,6 +259,23 @@
 				text-decoration: none;
 			}
 		}
+		.ripples {
+			position: absolute;
+			width: 1124px;
+			height: 1124px;
+			left: -590px;
+			top: -535px;
+
+			background-image: url('http://www.nouncy.com/img/ripples.png');
+			background-repeat: no-repeat;
+
+			animation:
+				emit 20s cubic-bezier(0.215, 0.610, 0.355, 1.000) 2s infinite,
+				fade 20s ease-out 2s infinite;
+			animation-fill-mode: backwards;
+
+			z-index: -1;
+		}
 		.logo {
 			position: absolute;
 			left: -55px;
@@ -182,6 +294,11 @@
 				margin: 0 10px 0 10px;
 			}
 		}
+		.share {
+			padding: 0 1em;
+			line-height: 50px;
+			font-weight: 700;
+		}
 		.version {
 			position: absolute;
 			top: 0;
@@ -193,8 +310,10 @@
 
 			// Adjust center alignment slightly to make it appear better
 			// centered.
-			box-sizing: border-box;
-			padding-left: 2px;
+			// TODO: Results in weird positioning behavior in the latest
+			// Chrome, so disable for now.
+			// box-sizing: border-box;
+			// padding-left: 2px;
 
 			// Left top corner is now at right top corner of `a.logo`, so
 			// if we rotate 90 degrees clockwise around that point we end

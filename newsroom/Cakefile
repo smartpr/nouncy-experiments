@@ -26,7 +26,7 @@ task "build:article", ->
 	bundle [
 		'styl/main.styl'
 		'styl/inlinesvg.styl'
-		'styl/nav.styl'
+		'styl/pagenav.styl'
 		'styl/content.styl'
 		'styl/article.styl'
 	], 'css/article.css'
@@ -38,13 +38,17 @@ task "build:bulletin", ->
 	bundle [
 		'styl/main.styl'
 		'styl/inlinesvg.styl'
-		'styl/nav.styl'
+		'styl/pagenav.styl'
 		'styl/content.styl'
 		'styl/bulletin.styl'
+
+		# 'styl/share.styl'
 	], 'css/bulletin.css'
 	bundle [
 		'coffee/inlinesvg.coffee'
 		'coffee/parallax.coffee'
+
+		# 'coffee/share.coffee'
 	], 'js/bulletin.js'
 
 task "build:slideshow", ->
@@ -53,7 +57,7 @@ task "build:slideshow", ->
 		'styl/inlinesvg.styl'
 		'styl/calltoaction.styl'
 		'styl/slider.styl'
-		'styl/nav.styl'
+		'styl/pagenav.styl'
 		'styl/content.styl'
 		'styl/slideshow.styl'
 
@@ -65,3 +69,16 @@ task "build:slideshow", ->
 
 		# 'coffee/phoneview.coffee'
 	], 'js/slideshow.js'
+
+
+task "build:share", ->
+	bundle [
+		'styl/main.styl'
+		'styl/inlinesvg.styl'
+		'styl/sharenav.styl'
+		'styl/content.styl'
+		'styl/bulletin.styl'
+	], 'css/share.css'
+	bundle [
+		'coffee/inlinesvg.coffee'
+	], 'js/share.js'
