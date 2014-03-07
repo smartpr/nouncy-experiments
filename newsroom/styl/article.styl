@@ -27,6 +27,7 @@ main {
 
 			& > p {
 				font-family: jaf-bernino-sans, sans-serif;
+					/*freight-sans-pro,*/
 				font-size: 1.1em;
 
 				& ~ p {
@@ -53,22 +54,22 @@ main {
 				}
 
 				& ~ [data-widget] {
-					.content {
+					figure {
 						width: 70%;
-					}
+						position: relative;
+						figcaption {
+							position: absolute;
+							top: 0;
+							width: 25%;
+							right: -30%;
+							padding: .5em 0;
 
-					figcaption {
-						position: absolute;
-						top: .5em;
-						right: 0;
-						width: 25%;
-						padding: .5em 0;
+							// Override styling that only applies to first widget.
+							color: #999;
+							background-color: transparent;
 
-						// Override styling that only applies to first widget.
-						color: #999;
-						background-color: transparent;
-
-						border-top: 1px solid #ccc;
+							border-top: 1px solid #ccc;
+						}
 					}
 				}
 			}

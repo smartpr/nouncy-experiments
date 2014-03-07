@@ -28,6 +28,7 @@ task "build:article", ->
 		'styl/inlinesvg.styl'
 		'styl/pagenav.styl'
 		'styl/content.styl'
+		'styl/image.widget.styl'
 		'styl/article.styl'
 	], 'css/article.css'
 	bundle [
@@ -40,6 +41,7 @@ task "build:bulletin", ->
 		'styl/inlinesvg.styl'
 		'styl/pagenav.styl'
 		'styl/content.styl'
+		'styl/image.widget.styl'
 		'styl/bulletin.styl'
 
 		# 'styl/share.styl'
@@ -59,6 +61,7 @@ task "build:slideshow", ->
 		'styl/slider.styl'
 		'styl/pagenav.styl'
 		'styl/content.styl'
+		'styl/image.widget.styl'
 		'styl/slideshow.styl'
 
 		# 'styl/phoneview.styl'

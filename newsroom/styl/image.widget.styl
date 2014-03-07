@@ -1,0 +1,87 @@
+main article [data-widget="image"] {
+
+	figure {
+		position: relative;
+
+		img {
+			width: 100%;
+			visibility: hidden;
+		}
+		.projection {
+			position: absolute;
+			top: 0;
+			right: 0;
+			bottom: 0;
+			left: 0;
+
+			background-size: cover;
+			background-repeat: no-repeat;
+			background-position: 50% 50%;
+		}
+	}
+
+	&.overlay {
+		figcaption {
+			z-index: 2;
+		}
+		.underlay-me {
+			// We have to explicitly put this element on top of the rest to
+			// allow its underlay to be behind its content. See [this proof of
+			// concept](http://jsbin.com/gikiduwo/1/edit).
+			z-index: 1;
+
+			&:before {
+				content: "";
+
+				position: absolute;
+				top: -30%;
+				right: 0;
+				bottom: 0;
+				left: 0;
+
+				background-image: linear-gradient(top,
+					rgba(0, 0, 0, 0),
+					rgba(0, 0, 0, .5) 20%,
+					rgba(0, 0, 0, .75) 40%,
+					rgba(0, 0, 0, 1));
+
+				// To adjust the darkness of the overlay we can limit
+				// ourself to tweaking the opacity.
+				opacity: .4;
+
+				z-index: -1;
+			}
+		}
+	}
+
+	&.banner {
+		width: 100%;
+
+		figure {
+			max-height: 100vh;
+			overflow-y: hidden;
+
+			.projection {
+				top: -50px;
+				bottom: -50px;
+			}
+			figcaption {
+				position: absolute;
+				top: auto;
+				right: 0;
+				bottom: 0;
+				left: auto;
+				width: auto;
+				padding: .5em 1em;
+
+				color: rgba(255, 255, 255, .7);
+				border: 0 none;
+			}
+		}
+
+		&.overlay {
+			background-color: rgba(0, 0, 0, .3);
+		}
+	}
+
+}

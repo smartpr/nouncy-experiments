@@ -2,11 +2,23 @@ main article {
 
 	text-align: center;
 
+	[data-widget="image"].banner {
+		h1,
+		h2 {
+			position: absolute;
+			right: 0;
+			bottom: 0;
+			left: 0;
+
+			margin: 0;
+			padding: .7em 1.4em;
+
+			color: White;
+		}
+	}
+
 	header {
 		margin-bottom: 2em;
-
-		// max-height: 100vh !important;
-		min-height: 300px !important;
 
 		position: relative;
 		.social {
@@ -43,8 +55,7 @@ main article {
 			margin-left: auto;
 			margin-right: auto;
 		}
-
-		& > [data-widget]:not([data-widget="header-image"]) {
+		& > [data-widget] {
 			figcaption {
 				position: absolute;
 				top: 0;
