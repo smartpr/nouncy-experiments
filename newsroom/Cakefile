@@ -39,29 +39,27 @@ task "build:bulletin", ->
 	bundle [
 		'styl/main.styl'
 		'styl/inlinesvg.styl'
+		'styl/draft.styl'
 		'styl/pagenav.styl'
 		'styl/content.styl'
 		'styl/image.widget.styl'
+		'styl/calltoaction.widget.styl'
 		'styl/bulletin.styl'
-
-		# 'styl/share.styl'
 	], 'css/bulletin.css'
 	bundle [
 		'coffee/inlinesvg.coffee'
 		'coffee/parallax.coffee'
-
-		# 'coffee/share.coffee'
 	], 'js/bulletin.js'
 
 task "build:slideshow", ->
 	bundle [
 		'styl/main.styl'
 		'styl/inlinesvg.styl'
-		'styl/calltoaction.styl'
 		'styl/slider.styl'
 		'styl/pagenav.styl'
 		'styl/content.styl'
 		'styl/image.widget.styl'
+		'styl/calltoaction.widget.styl'
 		'styl/slideshow.styl'
 
 		# 'styl/phoneview.styl'
@@ -73,15 +71,23 @@ task "build:slideshow", ->
 		# 'coffee/phoneview.coffee'
 	], 'js/slideshow.js'
 
-
-task "build:share", ->
+task "build:support", ->
 	bundle [
 		'styl/main.styl'
 		'styl/inlinesvg.styl'
-		'styl/sharenav.styl'
+		'styl/ribbon.styl'
+		'styl/author.styl'
+		'styl/support.styl'
 		'styl/content.styl'
+		'styl/image.widget.styl'
+		'styl/calltoaction.widget.styl'
+		'styl/mgmt.styl'
+		'styl/email.styl'
+		'styl/supporter.styl'
 		'styl/bulletin.styl'
-	], 'css/share.css'
+	], 'css/support.css'
 	bundle [
 		'coffee/inlinesvg.coffee'
-	], 'js/share.js'
+		'coffee/parallax.coffee'
+		'coffee/support.coffee'
+	], 'js/support.js'

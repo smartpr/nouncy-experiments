@@ -1,0 +1,78 @@
+#mgmt {
+	display: none;
+	&.active {
+		display: block;
+	}
+	
+	position: fixed;
+	top: 100px;
+	left: 150px;
+	width: 400px;
+	padding: 20px;
+	border-radius: 20px;
+	background-color: rgba(150, 150, 150, .7);
+
+	cursor: move;
+
+	z-index: 1;
+
+	.viewport {
+		background-color: White;
+		padding: 1px 1em 1em 1em;
+
+		.copylink {
+			white-space: nowrap;
+			text-decoration: underline;
+		}
+
+		button {
+			// display: inline-block;
+			display: block;
+			width: 100%;
+			height: 50px;
+			padding: 0 15px 0 55px;
+			line-height: 1;
+
+			outline: 0 none;
+			color: White;
+			fill: White;
+
+			appearance: none;
+			border: 0 none;
+
+			text-decoration: none;
+			white-space: nowrap;
+			vertical-align: middle;
+			text-align: left;
+
+			position: relative;
+			svg {
+				position: absolute;
+				top: 5px;
+				left: 8px;
+				width: 40px;
+				height: 40px;
+			}
+
+			span {
+				font-size: .8em;
+			}
+		}
+
+		.announce {
+			background-color: rgb(0, 166, 84);
+		}
+		.edit {
+			background-color: rgb(88, 96, 122);
+			svg {
+				top: 8px;
+				left: 10px;
+				width: 34px;
+				height: 34px;
+			}
+		}
+		.stats {
+			background-color: rgb(166, 93, 0);
+		}
+	}
+}

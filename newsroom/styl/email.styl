@@ -1,0 +1,138 @@
+#email {
+	display: none;
+	&.active {
+		display: block;
+	}
+
+	position: fixed;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	background-color: rgba(30, 30, 30, .9);
+
+	z-index: 1;
+
+	.viewport {
+		position: absolute;
+		top: 80px;
+		right: 28em;
+		width: 600px;
+		background-color: White;
+		& > h3 {
+			background-color: #5f9ea0;
+			fill: #5f9ea0;
+			color: White;
+
+			margin: 0;
+			padding-left: 60px;
+			line-height: 50px;
+
+			position: relative;
+			svg {
+				background-color: White;
+				position: absolute;
+				top: 0;
+				left: 0;
+				width: 50px;
+				height: 50px;
+			}
+		}
+		& > p {
+			background-color: lighten(#5f9ea0, 50%);
+
+			margin: 0;
+		}
+
+		.explain {
+			padding: .5em 1em .5em 60px;
+		}
+
+		form {
+			max-height: 500px;
+			overflow-y: auto;
+			padding: .5em 0;
+			box-sizing: border-box;
+			font-size: .9em;
+
+			& > div {
+				position: relative;
+				padding: .5em 1em .5em 60px;
+				label {
+					position: absolute;
+					top: .5em;
+					left: .5em;
+					width: 45px;
+					color: Silver;
+					font-size: .9em;
+					border-top: 1px solid #ddd;
+				}
+
+				&.from {
+					input {
+						width: 200px;
+					}
+				}
+				&.body {
+					textarea {
+						width: 500px;
+						height: 6em;
+						resize: none;
+					}
+					.excerpt {
+						// border-top: 1px solid Silver;
+						// border-bottom: 1px solid Silver;
+
+						width: 500px;
+						margin-top: 1em;
+
+						h4 {
+							font-size: 1.2em;
+							margin: .5em 0;
+						}
+						img {
+							float: left;
+							width: 150px;
+						}
+						p {
+							margin: 0 0 0 160px;
+							color: #aaa;
+						}
+					}
+				}
+				&.to {
+					input {
+						width: 400px;
+					}
+					ul {
+						margin: .2em 0;
+						padding: 0;
+						list-style-type: none;
+
+						li {
+							padding: .2em;
+						}
+						li:nth-child(odd) {
+							background-color: rgba(0, 0, 0, .1);
+						}
+					}
+				}
+			}
+		}
+
+		.summary {
+			line-height: 30px;
+			padding-left: 60px;
+
+			position: relative;
+			.done {
+				position: absolute;
+				top: 0;
+				right: 1em;
+				bottom: 0;
+				text-decoration: underline;
+				font-size: .8em;
+			}
+		}
+	}
+}

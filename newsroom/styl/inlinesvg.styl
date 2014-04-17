@@ -3,7 +3,10 @@
 
 // TODO: Generic way of making sure that inlined filter SVG is always hidden?
 
+// TODO: Why don't we just use `.ir` in case we *want* to replace with image -
+// no need to assume that here, right?
+
 html.inlinesvg :not(img)[data-inlinesvg] {
 	// TODO: Replace with `.ir`'s technique.
-	color: transparent !important;
+	// color: transparent !important;
 }

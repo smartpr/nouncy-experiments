@@ -14,4 +14,4 @@ $('[data-inlinesvg]').each ->
 		if $(@).is 'img'
 			$(@).replaceWith svg.documentElement
 		else
-			$(@).empty().append svg.documentElement
+			$(@).prepend svg.documentElement

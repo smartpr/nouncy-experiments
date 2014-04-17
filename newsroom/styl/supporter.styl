@@ -1,0 +1,64 @@
+#supporter {
+	display: none;
+	&.active {
+		display: block;
+	}
+
+	position: fixed;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	background-color: rgba(30, 30, 30, .9);
+
+	z-index: 1;
+
+	.viewport {
+		position: absolute;
+		top: 180px;
+		right: 28em;
+		width: 300px;
+		background-color: White;
+
+		padding: 1px 1em 1px 200px;
+
+		.card {
+			position: absolute;
+			top: 20px;
+			left: 20px;
+			width: 150px;
+
+			font-size: .8em;
+
+			img {
+				width: 100%;
+				margin-bottom: 1em;
+			}
+			a {
+				display: block
+				position: relative;
+				padding: 0 1em 0 40px;
+				line-height: 30px;
+				margin: .5em 1em;
+				svg {
+					position: absolute;
+					top: 0;
+					left: 0;
+					width: 30px;
+					height: 30px;
+				}
+
+				&.email {
+					fill: #5f9ea0;
+				}
+				&.facebook {
+					fill: #3B5998;
+				}
+			}
+		}
+
+		h4 {
+			font-size: 1.2em;
+		}
+	}
+}

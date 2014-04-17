@@ -167,8 +167,13 @@
 		}
 		.logo {
 			position: absolute;
-			left: -55px;
 
+			// Compensate for a weird glitch in how this element is positioned
+			// in Chrome at least (according to Web Inspector), and how it is
+			// rendered, which is why we use -54px instead of -55px.
+			// TODO: Investigate a bit more before drawing any final
+			// conclusions.
+			left: -54px;
 			height: 100%;
 
 			background-color: rgb(42, 52, 56);
